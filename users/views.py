@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import User
 from .serializers import UserSerializer, UserSerializerWithToken
 
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -20,5 +21,22 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         return data
 
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+@api_view(['POST'])
+def register(request):
+    data = request.data
+    try:
+        user = User.objects.create(
+            user_name=data['user_name'],
+            email=data['email'],
+            password=make_password(data['password'])
+        )
+        serializer = UserSerializerWithToken(user, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Something went wrong'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
