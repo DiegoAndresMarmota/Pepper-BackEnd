@@ -66,3 +66,11 @@ def uploadImage(request):
     user.image = request.FILES.get('image')
     user.save()
     return Response('Subiste tu imagen!')
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserProfile(request):
+    user = request.user
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
