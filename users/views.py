@@ -55,3 +55,14 @@ def putUser(request):
         user.password = make_password(data['password'])
     user.save()
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def uploadImage(request):
+    data = request.data
+    user_id = data['user_id']
+    user = User.objects.get(id=user_id)
+    user.image = request.FILES.get('image')
+    user.save()
+    return Response('Subiste tu imagen!')
