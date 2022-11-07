@@ -40,3 +40,18 @@ def register(request):
     except:
         message = {'detail': 'Something went wrong'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def putUser(request):
+    user = request.user
+    serializer = UserSerializerWithToken(user, many=False)
+    data = request.data
+    user.user_name = data['user_name']
+    user.bio = data['bio']
+    user.email = data['email']
+    if data['password'] != '':
+        user.password = make_password(data['password'])
+    user.save()
+    return Response(serializer.data)
