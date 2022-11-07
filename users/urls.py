@@ -8,4 +8,5 @@ urlpatterns = [
     path('image/', views.uploadImage),
     path('userProfile/', views.getUserProfile),
     path('<int:pk>/', views.getSoloUser),
+    path('getUsers/', views.getUsers),
 ]
