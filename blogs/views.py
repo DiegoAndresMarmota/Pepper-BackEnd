@@ -22,3 +22,15 @@ def getSoloBlog(request, pk):
     blog = Blog.objects.get(id=pk)
     serializer = BlogSerializer(blog, many=False)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def postBlog(request):
+    data = request.data
+    blog = Blog.objects.create(
+        user=request.user,
+        body=data['body'],
+    )
+    serializer = BlogSerializer(blog, many=False)
+    return Response(serializer.data)
