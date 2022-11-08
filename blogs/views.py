@@ -48,3 +48,14 @@ def putBlog(request, pk):
     else:
         return Response({'Error': 'No Autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteBlog(request, pk):
+    blog = Blog.objects.get(id=pk)
+    if blog.user == request.user:
+        blog.delete()
+        return Response('El Blog ha sido eliminado')
+    else:
+        return Response({'Error': 'No Autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
