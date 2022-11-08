@@ -34,3 +34,17 @@ def postBlog(request):
     )
     serializer = BlogSerializer(blog, many=False)
     return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def putBlog(request, pk):
+    data = request.data
+    blog = Blog.objects.get(id=pk)
+    serializer = BlogSerializer(instance=blog, data=data)
+    if blog.user == request.user:
+        if serializer.is_valid():
+            serializer.save()
+    else:
+        return Response({'Error': 'No Autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
+    return Response(serializer.data)
