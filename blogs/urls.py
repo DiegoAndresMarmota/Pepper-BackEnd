@@ -7,5 +7,5 @@ urlpatterns = [
     path('post/', views.postBlog),
     path('put/<int:pk>/', views.putBlog),
     path('delete/<int:pk>/', views.deleteBlog),
-
+    path('comment/<int:pk>/', views.comment),
 ]

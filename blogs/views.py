@@ -59,3 +59,19 @@ def deleteBlog(request, pk):
         return Response('El Blog ha sido eliminado')
     else:
         return Response({'Error': 'No Autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def comment(request, pk):
+    blog = Blog.objects.get(id=pk)
+    user = request.user
+    data = request.data
+    comment = Comment.objects.create(
+        user=user,
+        blog=blog,
+        text=data['text']
+    )
+    comments = blog.comment_set.all()
+    blog.save()
+    return Response('Haz posteado un comentario!')
